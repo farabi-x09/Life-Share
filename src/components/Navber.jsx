@@ -6,12 +6,11 @@ import { usePathname } from "next/navigation";
 import { Button, Avatar } from "@heroui/react";
 import Image from "next/image";
 
-// Gravity UI আইকন ইমপোর্ট
 import { Bars, Xmark, ChevronDown, ArrowRightToSquare } from "@gravity-ui/icons";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // ড্রপডাউন ম্যানুয়াল স্টেট
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
   const pathname = usePathname();
 
   // Mock Authentication States
@@ -50,7 +49,7 @@ export default function Navbar() {
 
             <Link href="/" className="flex items-center  font-bold text-2xl  text-gray-900">
               <Image src="/logo.png" alt="Life Share Logo" width={50} height={50} className="rounded-full" />
-              <span className="tracking-tight">Life <span className="text-red-600">Share</span></span>
+              <span className="tracking-tight">Life<span className="text-red-600">Share</span></span>
             </Link>
           </div>
 
