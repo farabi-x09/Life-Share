@@ -64,8 +64,8 @@ export default function Footer() {
           <div className="space-y-3 text-sm">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Contact Us</h3>
             <div className="flex items-center gap-2.5 text-gray-400">
-              <span className="text-red-500 font-bold text-xs border border-red-500/30 rounded px-1 scale-90 select-none">TEL</span>
-              <span>+880 1234-567890</span>
+              <span className="text-red-500 font-bold text-xs border border-red-500/30 rounded scale-90 select-none">TEL</span>
+              <span>+880 15070203520</span>
             </div>
             <div className="flex items-center gap-2.5 text-gray-400">
               <Envelope className="h-4 w-4 text-red-500 shrink-0" />

@@ -50,7 +50,7 @@ export const metadata = {
   description: "A modern and secure blood donation platform connecting donors and recipients directly to help save lives efficiently.",
 };
 
-// নিশ্চিত করুন এখানে "export default function RootLayout" ঠিকভাবে লেখা আছে
+
 export default function RootLayout({ children }) {
   return (
     <html

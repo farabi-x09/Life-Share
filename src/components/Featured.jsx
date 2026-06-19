@@ -26,7 +26,7 @@ export default function Featured() {
     {
       title: "Secure & Private",
       description: "Your personal and medical details are fully encrypted and only shared with verified medical contacts.",
-      // ডিফল্ট কালার লাল রাখা হয়েছে, হোভার করলে আরও ব্রাইট হবে
+      
       icon: <ShieldCheck className="h-6 w-6 text-red-500 transition-colors duration-300 group-hover:text-red-600" />,
     },
     {
@@ -79,10 +79,10 @@ export default function Featured() {
                 key={idx}
                 variants={cardVariants}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                // কার্ডে হালকা গ্রে-লাল কম্বিনেশন ব্যাকগ্রাউন্ড দেওয়া হয়েছে
+               
                 className="group bg-gray-50/50 border-2 border-gray-200/80 p-6 rounded-2xl hover:bg-red-55/30 hover:border-red-500 hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300"
               >
-                {/* Icon Wrapper - এখন শুরু থেকেই হালকা লাল ব্যাকগ্রাউন্ড এবং বর্ডার থাকবে */}
+               
                 <div className="p-3 bg-red-50/60 border border-red-100 rounded-xl w-fit mb-5 group-hover:bg-red-100/70 group-hover:border-red-400/50 transition-all duration-300">
                   {feature.icon}
                 </div>
