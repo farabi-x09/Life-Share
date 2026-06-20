@@ -147,7 +147,8 @@ export default function Register() {
       const imgbbData = await imgbbRes.json();
       if (!imgbbData.success) throw new Error("ImgBB upload failed");
 
-      await authClient.signUp.email({
+     
+      const response = await authClient.signUp.email({
         email: formData.email,
         password: formData.password,
         name: formData.name,
@@ -159,6 +160,22 @@ export default function Register() {
         status: "active"
       });
 
+      
+      if (response?.error) {
+        let msg = response.error.message || "Registration failed.";
+        
+      
+        if (response.error.code === "USER_ALREADY_EXISTS" || msg.toLowerCase().includes("exist")) {
+          msg = "This email is already registered! Please use another email or login.";
+        }
+        
+        setErrorMsg(msg);
+        toast.error(msg, { position: "top-right", autoClose: 5000, theme: "light" });
+        setIsSubmitting(false);
+        return; 
+      }
+
+     
       console.log("Registration Data:", {
         email: formData.email,
         password: formData.password,
@@ -171,15 +188,9 @@ export default function Register() {
         status: "active"
       });
 
-   
       toast.success("Registration Successful! Welcome to LifeShare.", {
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: "light",
       });
 
@@ -190,7 +201,6 @@ export default function Register() {
       setFilteredUpazilas([]);
       e.target.reset();
 
-   
       setTimeout(() => {
         window.location.href = "/";
       }, 3000);
@@ -438,7 +448,7 @@ export default function Register() {
           {/* Login Link */}
           <p className="text-center text-sm font-medium text-gray-500 mt-1">
             Already registered?{" "}
-            <Link href="/login" className="text-red-600 font-bold hover:underline transition-all">
+            <Link href="/auth/signin" className="text-red-600 font-bold hover:underline transition-all">
               Login here
             </Link>
           </p>
