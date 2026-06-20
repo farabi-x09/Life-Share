@@ -96,7 +96,7 @@ export default function Footer() {
               <LogoFacebook className="h-4 w-4" />
             </a>
             
-            {/* Using Xmark to perfectly represent the rebranded X symbol */}
+           
             <a 
               href="https://www.linkedin.com/in/farabi-ahmed13/" 
               target="_blank" 

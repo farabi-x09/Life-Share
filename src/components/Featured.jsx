@@ -12,6 +12,10 @@ export default function Featured() {
       transition: { staggerChildren: 0.15 },
     },
   };
+// someone&apos;s
+
+
+
 
   const cardVariants = {
     hidden: { opacity: 0, y: 25 },

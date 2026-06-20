@@ -53,7 +53,7 @@ export default function Banner() {
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-500/10 border border-red-500/30 rounded-full w-fit backdrop-blur-sm"
           >
-            {/* লাইভ ডট এনিমেশন */}
+           
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
@@ -92,13 +92,15 @@ export default function Banner() {
             variants={itemVariants}
           >
             {/* Join as a Donor Button */}
+            <Link href="/auth/register">
             <Button
-              as={Link}
+              
               href="/register"
               className="px-5 sm:px-8 py-5 sm:py-6 bg-red-700 hover:bg-white text-white hover:text-red-700 font-semibold rounded-md shadow-lg transition-all h-auto text-sm sm:text-base w-fit"
             >
               <HeartFill className="scale-90 sm:scale-100" /> Join as Donor
             </Button>
+              </Link>
 
             {/* Search Donors Button */}
             <motion.div
