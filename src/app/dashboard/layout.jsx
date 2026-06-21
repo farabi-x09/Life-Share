@@ -1,6 +1,7 @@
 // src/app/dashboard/layout.js
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import { ToastContainer } from "react-toastify";
 
 export default function DashboardLayout({ children }) {
   return (
@@ -11,6 +12,7 @@ export default function DashboardLayout({ children }) {
       
       <main className="flex-1 h-full overflow-y-auto p-4 md:p-8">
         {children}
+        <ToastContainer></ToastContainer>
       </main>
     </div>
   );
