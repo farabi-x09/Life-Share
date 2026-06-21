@@ -28,7 +28,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     await authClient.signOut();
     setIsDropdownOpen(false);
-    window.location.href = "/auth/signin";
+    window.location.href = "/signin";
   };
 
   return (
@@ -67,7 +67,7 @@ export default function Navbar() {
             {isPending ? (
               <div className="w-8 h-8 animate-pulse bg-gray-200 rounded-full" />
             ) : !isLoggedIn ? (
-              <Link href="/auth/signin">
+              <Link href="/signin">
                 <Button className="bg-red-600 text-white font-bold h-10 px-4 rounded-xl hover:bg-red-700">
                   <ArrowRightToSquare className="w-4 h-4 mr-1" /> Login
                 </Button>
@@ -80,7 +80,11 @@ export default function Navbar() {
                   className="flex items-center gap-3 px-3 py-1.5 rounded-full border border-gray-100 bg-gray-50 hover:bg-white transition-all outline-none"
                 >
                   <div className="w-8 h-8 rounded-full overflow-hidden relative border border-gray-200">
+                    {/* {session?.user?.image || "/default-avatar.png"} */}
                     <Image src={session?.user?.image || "/default-avatar.png"} alt="User" fill className="object-cover" />
+                    {/* if image are not available
+                    then show name first letter */}
+                   
                   </div>
                   <div className="hidden md:flex flex-col text-left">
                     <span className="text-xs font-bold text-gray-900 leading-tight">{session?.user?.name}</span>
@@ -98,7 +102,7 @@ export default function Navbar() {
                         <p className="font-bold text-sm text-gray-800 truncate">{session?.user?.name}</p>
                         <p className="text-[10px] text-gray-400 uppercase font-bold">{session?.user?.role}</p>
                       </div>
-                      <Link href="/dashboard" className="block px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 rounded-lg">Dashboard</Link>
+                      <Link href="/dashboard/donor" className="block px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 rounded-lg">Dashboard</Link>
                       <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 rounded-lg">Log Out</button>
                     </div>
                   </>

@@ -59,9 +59,9 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-white text-gray-900">
-        <Navber />
+        {/* <Navber /> */}
         <main className="flex-grow w-full">{children}</main>
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );

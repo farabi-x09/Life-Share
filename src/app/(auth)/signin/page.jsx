@@ -119,7 +119,7 @@ export default function SignIn() {
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
-            New to LifeShare? <Link href="/auth/register" className="text-red-600 font-bold hover:underline">Create an account</Link>
+            New to LifeShare? <Link href="/register" className="text-red-600 font-bold hover:underline">Create an account</Link>
           </p>
         </div>
       </div>

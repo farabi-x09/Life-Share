@@ -92,7 +92,7 @@ export default function Banner() {
             variants={itemVariants}
           >
             {/* Join as a Donor Button */}
-            <Link href="/auth/register">
+            <Link href="/register">
             <Button
               
               href="/register"
