@@ -200,7 +200,7 @@ import { Eye, Edit, Trash2, CheckCircle, XCircle, Syringe, MapPin, CalendarDays,
 import Loading from "../loading"; 
 import { getSomeDonation} from "@/lib/api/donations"; // 💡 updateDonationStatus ইমপোর্ট করা হলো
 import { toast } from "react-toastify"; // 💡 toast ইমপোর্ট করা হলো
-import { updateDonationStatus } from "@/lib/actions/donation_requests";
+import { deleteDonationRequest, updateDonationStatus } from "@/lib/actions/donation_requests";
 
 export default function DashboardHome() {
   const { data: session } = useSession();
@@ -249,14 +249,23 @@ export default function DashboardHome() {
     }
   };
 
-  const confirmDelete = async () => {
+ const confirmDelete = async () => {
     if (!requestToDelete) return;
-    
-    // ⚠️ ভবিষ্যতে ডাটাবেজ থেকে ডিলিট করার জন্য এখানে API Call বসাতে হবে
-    
-    setRequests(requests.filter(req => (req.id || req._id) !== requestToDelete));
-    setRequestToDelete(null);
-    toast.success("Request deleted successfully!");
+
+    try {
+      // ১. ডাটাবেজে API কল করে ডিলিট করা
+      await deleteDonationRequest(requestToDelete);
+
+      // ২. সফল হলে পেজের UI থেকে মুছে ফেলা
+      setRequests(requests.filter(req => (req.id || req._id) !== requestToDelete));
+      toast.success("Request deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete", error);
+      toast.error("Failed to delete request. Please try again.");
+    } finally {
+      // ৩. শেষে ডিলিট কনফার্মেশন মোডালটি বন্ধ করে দেওয়া
+      setRequestToDelete(null);
+    }
   };
 
   if (loading || !session) return <Loading />;
