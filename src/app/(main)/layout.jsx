@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navber';
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 
 const MainLayout = ({ children }) => {
     return (
@@ -10,6 +11,7 @@ const MainLayout = ({ children }) => {
             {children}
             </main>
             <Footer></Footer>
+            <ToastContainer />
         </div>
     );
 };

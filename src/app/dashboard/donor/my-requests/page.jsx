@@ -5,7 +5,9 @@ import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { Eye, Edit, Trash2, CheckCircle, XCircle, Filter, ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import Loading from "../../loading"; 
-import { getSomeDonation } from "@/lib/api/donations";
+import { getSomeDonation } from "@/lib/api/donations"; // 💡 updateDonationStatus ইমপোর্ট করা হলো
+import { toast } from "react-toastify"; // 💡 toast ইমপোর্ট করা হলো
+import { updateDonationStatus } from "@/lib/actions/donation_requests";
 
 export default function MyRequestsPage() {
   const { data: session } = useSession();
@@ -36,14 +38,31 @@ export default function MyRequestsPage() {
     if (session?.user?.email) fetchRequests();
   }, [session]);
 
+  // 💡 ডাটাবেজে স্ট্যাটাস আপডেট করার লজিক যোগ করা হলো
   const updateStatus = async (id, newStatus) => {
-    setRequests(requests.map(req => req.id === id ? { ...req, status: newStatus } : req));
+    try {
+      // ১. সার্ভারে API কল করা হলো
+      await updateDonationStatus(id, { status: newStatus });
+
+      // ২. সফল হলে পেজের UI আপডেট করা হলো
+      setRequests(requests.map(req => (req.id || req._id) === id ? { ...req, status: newStatus } : req));
+      toast.success(`Request marked as ${newStatus} successfully!`);
+      
+    } catch (error) {
+      console.error("Failed to update status", error);
+      toast.error("Failed to update status. Please try again.");
+    }
   };
 
   const confirmDelete = async () => {
     if (!requestToDelete) return;
-    setRequests(requests.filter(req => req.id !== requestToDelete));
+    
+    // ⚠️ নোট: ভবিষ্যতে ডাটাবেজ থেকে ডিলিট করার জন্য এখানেও একটি API Call বসাতে হবে
+    // উদাহরণ: await deleteDonationRequest(requestToDelete);
+    
+    setRequests(requests.filter(req => (req.id || req._id) !== requestToDelete));
     setRequestToDelete(null);
+    toast.success("Request deleted successfully!");
   };
 
   const filteredRequests = statusFilter === "all" 
@@ -101,7 +120,6 @@ export default function MyRequestsPage() {
         {filteredRequests.length > 0 ? (
           <>
             <div className="overflow-x-hidden md:overflow-x-auto md:p-6">
-              {/* 💡 এখানে block md:table দিয়েছি যাতে মোবাইলে টেবিল ভেঙে কার্ড হয়ে যায় */}
               <table className="w-full text-left border-collapse block md:table">
                 <thead className="hidden md:table-header-group">
                   <tr className="text-gray-400 text-xs uppercase font-bold border-b border-gray-100">
@@ -162,7 +180,7 @@ export default function MyRequestsPage() {
                               <button onClick={() => updateStatus(req.id || req._id, "canceled")} title="Cancel Request" className="text-red-600 hover:scale-110 transition-transform"><XCircle size={20} className="md:w-[18px] md:h-[18px]"/></button>
                             </>
                           )}
-                          <Link href={`/dashboard/requests/${req.id || req._id}`} title="View Details" className="text-blue-500 hover:scale-110 transition-transform"><Eye size={20} className="md:w-[18px] md:h-[18px]"/></Link>
+                          <Link href={`/donation-requests/${req.id || req._id}`} title="View Details" className="text-blue-500 hover:scale-110 transition-transform"><Eye size={20} className="md:w-[18px] md:h-[18px]"/></Link>
                           <Link href={`/dashboard/requests/edit/${req.id || req._id}`} title="Edit Request" className="text-orange-500 hover:scale-110 transition-transform"><Edit size={20} className="md:w-[18px] md:h-[18px]"/></Link>
                           <button onClick={() => setRequestToDelete(req.id || req._id)} title="Delete Request" className="text-gray-400 hover:text-red-600 hover:scale-110 transition-transform">
                             <Trash2 size={20} className="md:w-[18px] md:h-[18px]"/>

@@ -58,7 +58,8 @@ export default function PublicDonationRequestsPage() {
       router.push(`/donation-requests/${id}`); 
     } else {
       toast.error("Please sign in to view detailed information and accept this donation request.");
-      router.push(`/signin`); 
+      // router.push(`/signin?redirect=/donation-requests/${id}`); 
+      window.location.href = `/signin?redirect=/donation-requests/${id}`;
     }
   };
 

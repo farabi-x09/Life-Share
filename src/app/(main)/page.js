@@ -3,7 +3,7 @@ import ContactUs from "@/components/Contact-us";
 import Featured from "@/components/Featured";
 import HowItWorks from "@/components/How-works";
 import StatsSection from "@/components/Stats";
-import Image from "next/image";
+
 import { ToastContainer } from "react-toastify";
 
 export default function Home() {
