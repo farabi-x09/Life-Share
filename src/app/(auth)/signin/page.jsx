@@ -47,9 +47,11 @@ function SignInForm() {
 
       setTimeout(() => {
         if (redirect) {
-          router.push(redirect);
+          // router.push(redirect);
+          window.location.href = redirect;
         } else {
-          router.push("/");
+          // router.push("/");
+          window.location.href = "/";
         }
       }, 500);
 
