@@ -7,6 +7,7 @@ import { Button } from "@heroui/react";
 import Image from "next/image";
 import { Bars, Xmark, ChevronDown, ArrowRightToSquare } from "@gravity-ui/icons";
 import { authClient, useSession } from "@/lib/auth-client";
+import { label } from "framer-motion/client";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "Donation Requests", href: "/donation-requests" },
+    {label: "Search", href: "/search"},
   ];
 
   if (isLoggedIn) navLinks.push({ label: "Funding", href: "/funding" });
