@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export default function AllUsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState("all"); // নতুন স্টেট
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const fetchUsers = async () => {
     try {
@@ -25,7 +25,7 @@ export default function AllUsersPage() {
 
   useEffect(() => { fetchUsers(); }, []);
 
-  // ফিল্টার লজিক
+
   const filteredUsers = users.filter(user => {
     if (statusFilter === "all") return true;
     return user.status === statusFilter;

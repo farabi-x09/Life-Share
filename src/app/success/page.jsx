@@ -1,52 +1,11 @@
-// import { funding } from '@/lib/actions/donation_requests'
-// import { stripe } from '@/lib/stripe'
-// import { redirect } from 'next/navigation'
 
-
-
-// export default async function Success({ searchParams }) {
-//   const { session_id } = await searchParams
-
-//   if (!session_id)
-//     throw new Error('Please provide a valid session_id (`cs_test_...`)')
-
-//   const {
-//     status,
-//     metadata,
-//     customer_details: { email: customerEmail }
-//   } = await stripe.checkout.sessions.retrieve(session_id, {
-//     expand: ['line_items', 'payment_intent']
-//   })
-
-//   if (status === 'open') {
-//     return redirect('/')
-//   }
-
-//   if (status === 'complete') {
-
-//     await funding({...metadata,
-//         sessionId: session_id,
-       
-//     })
-
-//     return (
-//       <section id="success">
-//         <p>
-//           We appreciate your business! A confirmation email will be sent to{' '}
-//           {customerEmail}. If you have any questions, please email{' '}
-//           <a href="mailto:orders@example.com">orders@example.com</a>.
-//         </p>
-//       </section>
-//     )
-//   }
-// }
 
 
 import { funding } from '@/lib/actions/donation_requests'
 import { stripe } from '@/lib/stripe'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle, ArrowRight } from 'lucide-react' // 💡 আইকন ইমপোর্ট
+import { CheckCircle, ArrowRight } from 'lucide-react' 
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams
@@ -67,13 +26,13 @@ export default async function Success({ searchParams }) {
   }
 
   if (status === 'complete') {
-    // ডাটাবেজে সেভ করা
+    
     await funding({
         ...metadata,
         sessionId: session_id,
     })
 
-    // 💡 নতুন সুন্দর ডিজাইন
+    
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl p-8 md:p-10 text-center border border-gray-100">

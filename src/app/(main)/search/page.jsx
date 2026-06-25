@@ -16,7 +16,7 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
-  // 🌍 লোকেশন ডাটা নিয়ে আসার লজিক
+ 
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/nuhil/bangladesh-geocode/master/districts/districts.json")
       .then(res => res.json())
@@ -34,27 +34,26 @@ export default function SearchPage() {
     setFilteredUpazilas(district ? upazilas.filter(u => u.district_id === district.id) : []);
   };
 
-  // 🔍 সার্চ করার লজিক (নতুন কোনো API লাগবে না, আগেরটা দিয়েই কাজ হবে)
-  // 🔍 সার্চ করার লজিক
+  
   const handleSearch = async () => {
     setLoading(true);
     setHasSearched(true);
     
     try {
-      // 💡 এখানে process.env.NEXT_PUBLIC_BASE_URL যোগ করা হয়েছে যাতে সে সঠিক ব্যাকএন্ড (পোর্ট 5000) থেকে ডাটা আনে
+    
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`);
       
       if (!res.ok) throw new Error("Failed to fetch data");
       
       const allUsers = await res.json();
 
-      // ইউজারদের মধ্যে থেকে সিলেক্ট করা ডাটা অনুযায়ী ফিল্টার করা হচ্ছে
+      
       const filteredDonors = allUsers.filter(user => {
         const matchBlood = searchParams.bloodGroup ? user.bloodGroup === searchParams.bloodGroup : true;
         const matchDistrict = searchParams.district ? user.district === searchParams.district : true;
         const matchUpazila = searchParams.upazila ? user.upazila === searchParams.upazila : true;
         
-        // শুধু তাদেরকেই দেখাবে যাদের প্রোফাইলে ব্লাড গ্রুপ দেওয়া আছে
+        
         return matchBlood && matchDistrict && matchUpazila && user.bloodGroup;
       });
 

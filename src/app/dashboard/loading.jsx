@@ -5,10 +5,10 @@ export default function Loading() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50/50">
       <div className="relative w-16 h-16">
         
-        {/* Outer Spinner (Clockwise) */}
+      
         <div className="absolute w-16 h-16 border-4 border-red-100 border-t-red-600 rounded-full animate-spin"></div>
         
-        {/* Inner Spinner (Counter-Clockwise using scale-x-[-1]) */}
+        
         <div className="absolute top-2 left-2 w-12 h-12 border-4 border-red-50 border-t-red-400 rounded-full animate-spin [scale:-1_1]"></div>
       
       </div>

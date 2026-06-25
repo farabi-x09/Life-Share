@@ -7,10 +7,8 @@ import { MapPin, CalendarDays, Droplet, Clock, SearchX, ArrowRight } from "lucid
 import { getDonations } from "@/lib/api/donations";
 import { toast } from "react-toastify";
 
-// 💡 ২৪ ঘণ্টার টাইমকে ১২ ঘণ্টার AM/PM-এ রূপান্তর করার ফাংশন
 const formatTimeAMPM = (timeStr) => {
   if (!timeStr) return "";
-  // যদি আগে থেকেই AM/PM থাকে, তবে সেটাই দেখাবে
   if (timeStr.toLowerCase().includes('am') || timeStr.toLowerCase().includes('pm')) {
     return timeStr;
   }
@@ -20,7 +18,7 @@ const formatTimeAMPM = (timeStr) => {
 
   let hour = parseInt(hourString, 10);
   const ampm = hour >= 12 ? "PM" : "AM";
-  hour = hour % 12 || 12; // 0 বা 12+ কে 1-12 তে কনভার্ট করবে
+  hour = hour % 12 || 12; 
   const formattedHour = hour < 10 ? `0${hour}` : hour;
 
   return `${formattedHour}:${minute} ${ampm}`;
@@ -141,7 +139,7 @@ export default function PublicDonationRequestsPage() {
                       </div>
                       <div className="flex flex-col">
                         <span className="text-xs text-gray-400 font-medium">TIME</span>
-                        {/* 💡 এখানে টাইমটিকে AM/PM ফাংশনের ভেতর দিয়ে পাস করানো হলো */}
+                        
                         <span className="font-semibold text-gray-900 -mt-0.5">{formatTimeAMPM(req.donationTime || req.time)}</span>
                       </div>
                     </div>

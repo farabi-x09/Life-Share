@@ -5,8 +5,8 @@ import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { Eye, Edit, Trash2, CheckCircle, XCircle, Filter, ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import Loading from "../../loading"; 
-import { getSomeDonation } from "@/lib/api/donations"; // 💡 updateDonationStatus ইমপোর্ট করা হলো
-import { toast } from "react-toastify"; // 💡 toast ইমপোর্ট করা হলো
+import { getSomeDonation } from "@/lib/api/donations"; 
+import { toast } from "react-toastify"; 
 import { deleteDonationRequest, updateDonationStatus } from "@/lib/actions/donation_requests";
 
 export default function MyRequestsPage() {
@@ -38,13 +38,13 @@ export default function MyRequestsPage() {
     if (session?.user?.email) fetchRequests();
   }, [session]);
 
-  // 💡 ডাটাবেজে স্ট্যাটাস আপডেট করার লজিক যোগ করা হলো
+ 
   const updateStatus = async (id, newStatus) => {
     try {
-      // ১. সার্ভারে API কল করা হলো
+      
       await updateDonationStatus(id, { status: newStatus });
 
-      // ২. সফল হলে পেজের UI আপডেট করা হলো
+     
       setRequests(requests.map(req => (req.id || req._id) === id ? { ...req, status: newStatus } : req));
       toast.success(`Request marked as ${newStatus} successfully!`);
       
@@ -58,17 +58,17 @@ const confirmDelete = async () => {
     if (!requestToDelete) return;
 
     try {
-      // ১. ডাটাবেজে API কল করে ডিলিট করা
+      
       await deleteDonationRequest(requestToDelete);
 
-      // ২. সফল হলে পেজের UI থেকে মুছে ফেলা
+     
       setRequests(requests.filter(req => (req.id || req._id) !== requestToDelete));
       toast.success("Request deleted successfully!");
     } catch (error) {
       console.error("Failed to delete", error);
       toast.error("Failed to delete request. Please try again.");
     } finally {
-      // ৩. শেষে ডিলিট কনফার্মেশন মোডালটি বন্ধ করে দেওয়া
+     
       setRequestToDelete(null);
     }
   };

@@ -114,14 +114,17 @@ export default function Banner() {
               }}
               className="flex w-fit"
             >
+              <Link href="donation-requests">
+             
               <Button
-                as={Link}
+            
                 href="/search"
                 variant="bordered"
                 className="px-5 sm:px-8 py-5 sm:py-6 border-2 border-red-600 hover:bg-red-600/50 text-white font-semibold rounded-md transition-all h-auto text-sm sm:text-base w-fit"
               >
                 <Magnifier className="scale-90 sm:scale-100" /> Search Donors
               </Button>
+               </Link>
             </motion.div>
           </motion.div>
 

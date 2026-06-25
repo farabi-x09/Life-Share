@@ -15,7 +15,6 @@ import Link from "next/link";
 import { getRequestById } from "@/lib/api/donations";
 import { updateDonationStatus } from "@/lib/actions/donation_requests";
 
-// টাইম ফরম্যাট করার ফাংশন
 const formatTimeAMPM = (timeStr) => {
   if (!timeStr) return "";
   if (timeStr.toLowerCase().includes('am') || timeStr.toLowerCase().includes('pm')) return timeStr;
@@ -32,7 +31,7 @@ export default function RequestDetailsPage() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
   const params = useParams();
-  const pathname = usePathname(); // 💡 বর্তমান পাথের জন্য
+  const pathname = usePathname(); 
   const requestId = params?.id;
 
   const [requestData, setRequestData] = useState(null);
@@ -42,7 +41,7 @@ export default function RequestDetailsPage() {
 
   
 useEffect(() => {
-  if (isPending) return; // 💡 session check sesh na howa porjonto eikhane ite thame thakbe
+  if (isPending) return; 
 
   if (session === null) {
     toast.error("Please sign in to view this page.");
@@ -71,7 +70,7 @@ useEffect(() => {
   };
 
   fetchDetails();
-}, [requestId, session, pathname, isPending]); // 💡 dependency array-te isPending jog koro
+}, [requestId, session, pathname, isPending]); 
   const handleConfirmDonation = async (e) => {
     e.preventDefault();
     setConfirming(true);
@@ -83,8 +82,7 @@ useEffect(() => {
         donorEmail: session?.user?.email
       };
 
-      // 💡 API Call
-      // await updateRequestStatus(requestId, updatePayload);
+     
       await updateDonationStatus(requestId, updatePayload);
 
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -105,7 +103,7 @@ useEffect(() => {
 
 
   // Fayil-er nicher dike jekhane loading check kora hoyeche:
-if (loading || isPending || !session) { // 💡 isPending jog kora holo
+if (loading || isPending || !session) { //  isPending jog kora holo
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Loader2 className="w-8 h-8 animate-spin text-red-600" />

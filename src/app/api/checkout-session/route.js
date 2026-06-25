@@ -36,18 +36,11 @@ export async function POST(request) {
           quantity: 1,
         },
       ],
-      // metadata: {
-      //  price: Number(price),
-      //   userId: user.id,
-      //   userEmail: user.email,
-      //   title,
-      //   productId,
-      //   date: new Date().toISOString(),
-      // },
+     
       metadata: {
-        price: String(price), // 💡 Stripe metadata তে Number দেওয়া যায় না, String দিতে হয়
+        price: String(price),
         userId: String(user.id),
-        userName: String(user.name || "Anonymous"), // 💡 টেবিলে দেখানোর জন্য নাম অ্যাড করা হলো
+        userName: String(user.name || "Anonymous"), 
         userEmail: String(user.email),
         title: String(title),
         productId: String(productId),

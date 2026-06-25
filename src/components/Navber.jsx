@@ -95,7 +95,7 @@ export default function Navbar() {
                   <ChevronDown className={`w-3 h-3 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* Dropdown Menu - Overlay দিয়ে ফিক্স করা হয়েছে */}
+              
                 {isDropdownOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />

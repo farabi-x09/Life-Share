@@ -91,15 +91,15 @@ export default function CreateRequestPage() {
     try {
       const response = await createDonationRequest(newRequestData);
 
-      // রেসপন্স এলেই আমরা টোস্ট দেখাবো
+      
       if (response) {
-        // ১. আগে টোস্ট দেখাও
+        
         toast.success("Donation request created successfully!");
 
-        // ২. ফর্ম রিসেট করো
+        
         e.target.reset();
 
-        // ৩. এরপর ১.৫ সেকেন্ড অপেক্ষা করে রিডাইরেক্ট করো
+       
         setTimeout(() => {
           router.push("/dashboard/donor/my-requests");
         }, 1500);
@@ -115,8 +115,7 @@ export default function CreateRequestPage() {
 
   if (!session) return <Loading />;
 
-  // 💡 Blocked User Check
-  // (তোমার ডাটাবেজে ইউজার স্ট্যাটাস যে নামে আছে, সেই অনুযায়ী এটি ঠিক করে নিও, যেমন: isBlocked, status === 'blocked')
+  
   if (session?.user?.status === "blocked") {
     return (
       <div className="max-w-3xl mx-auto mt-10 p-8 bg-red-50 border-2 border-red-200 rounded-3xl text-center">

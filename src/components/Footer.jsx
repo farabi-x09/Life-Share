@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-// Fixed Gravity UI imports: X changed to Xmark
+
 import { Envelope, Compass, Xmark, LogoFacebook, LogoGithub, LogoLinkedin } from "@gravity-ui/icons";
 
 export default function Footer() {
