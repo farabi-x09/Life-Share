@@ -1,12 +1,24 @@
 "use server"
 
+import { headers } from "next/headers";
+import { auth } from "../auth";
+
 const baseUrl=process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function createDonationRequest(newDonationRequestData) {
+
+const tokenData = await auth?.api?.getToken({
+  headers: await headers()
+  
+})
+const token = tokenData?.token
+console.log(token);
+
   const response = await fetch(`${baseUrl}/api/donation_requests`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+       authorization: `Bearer ${token}`
     },
     body: JSON.stringify(newDonationRequestData),
   });
