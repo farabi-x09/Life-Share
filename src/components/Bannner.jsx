@@ -114,7 +114,7 @@ export default function Banner() {
               }}
               className="flex w-fit"
             >
-              <Link href="donation-requests">
+              <Link href="/search">
              
               <Button
             
