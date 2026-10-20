@@ -1,15 +1,22 @@
 
+
+
 // "use client";
 
 // import React, { useState, useEffect } from "react";
 // import { toast } from "react-toastify";
-
 // import { Trash2, Eye, Edit } from "lucide-react";
 // import Image from "next/image";
-
 // import Link from "next/link";
+// // 💡 ইউজারের রোল চেক করার জন্য useSession ইম্পোর্ট করা হলো
+// // CHANGED: also import authClient (needed to get the JWT token)
+// import { useSession, authClient } from "@/lib/auth-client"; 
 
 // export default function AllRequestsPage() {
+//   // 💡 সেশন থেকে ইউজারের ডাটা বের করা হলো
+//   const { data: session } = useSession(); 
+//   const isAdmin = session?.user?.role === "admin"; // 💡 চেক করা হলো ইউজার অ্যাডমিন কি না
+
 //   const [requests, setRequests] = useState([]);
 //   const [loading, setLoading] = useState(true);
 //   const [bloodFilter, setBloodFilter] = useState("all");
@@ -17,15 +24,23 @@
   
 //   const [requestToDelete, setRequestToDelete] = useState(null); 
 
+//   // CHANGED: send the token to /api/users, and don't crash if it fails
 //   const fetchRequestsAndUsers = async () => {
 //     try {
-//       const [reqRes, usersRes] = await Promise.all([
-//         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/donation_requests`),
-//         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`)
-//       ]);
-
+//       // 1) donation requests are still public
+//       const reqRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/donation_requests`);
 //       const requestsData = await reqRes.json();
-//       const usersData = await usersRes.json();
+
+//       // 2) users list is admin-only now, so fetch it only for admins, with a token
+//       let usersData = [];
+//       if (isAdmin) {
+//         const { data: tokenData } = await authClient.token();
+//         const usersRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`, {
+//           headers: { Authorization: `Bearer ${tokenData?.token}` },
+//         });
+//         const usersJson = await usersRes.json();
+//         usersData = Array.isArray(usersJson) ? usersJson : []; // safe if the request failed
+//       }
 
 //       const mergedData = requestsData.map(req => {
 //         const matchingUser = usersData.find(user => user.email === req.requesterEmail);
@@ -43,9 +58,11 @@
 //     }
 //   };
 
+//   // CHANGED: wait until the session is loaded, because isAdmin depends on it
 //   useEffect(() => { 
-//     fetchRequestsAndUsers(); 
-//   }, []);
+//     if (session) fetchRequestsAndUsers(); 
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [session?.user?.id]);
 
 //   const filteredRequests = requests.filter(req => {
 //     const matchesBlood = bloodFilter === "all" || req.bloodGroup === bloodFilter;
@@ -88,7 +105,7 @@
 //     setRequestToDelete(null); 
 //   };
 
-//   if (loading) return (
+//   if (loading || !session) return (
 //     <div className="flex justify-center items-center h-[60vh]">
 //       <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
 //     </div>
@@ -125,7 +142,8 @@
 //                 <th className="p-5 font-bold">Blood Group</th>
 //                 <th className="p-5 font-bold">Location</th>
 //                 <th className="p-5 font-bold">Status</th>
-//                 <th className="p-5 font-bold">Action</th>
+//                 {/* 💡 অ্যাডমিন হলেই শুধু অ্যাকশন কলামের হেড দেখাবে */}
+//                 {isAdmin && <th className="p-5 font-bold">Action</th>} 
 //               </tr>
 //             </thead>
 //             <tbody>
@@ -154,20 +172,23 @@
 //                       <option value="canceled">Canceled</option>
 //                     </select>
 //                   </td>
-//                   <td className="p-5">
-                 
-//                     <div className="flex items-center gap-2">
-//                       <Link href={`/donation-requests/${req._id}`} title="View Request" className="text-blue-500 hover:text-blue-700 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition-colors">
-//                         <Eye size={18}/>
-//                       </Link>
-//                       <Link href={`/dashboard/requests/edit/${req._id}`} title="Edit Request" className="text-orange-500 hover:text-orange-700 bg-orange-50 p-2 rounded-lg hover:bg-orange-100 transition-colors">
-//                         <Edit size={18}/>
-//                       </Link>
-//                       <button onClick={() => handleDeleteClick(req._id)} title="Delete Request" className="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition-colors">
-//                         <Trash2 size={18}/>
-//                       </button>
-//                     </div>
-//                   </td>
+                  
+//                   {/* 💡 অ্যাডমিন হলেই শুধু বাটনগুলো দেখাবে */}
+//                   {isAdmin && (
+//                     <td className="p-5">
+//                       <div className="flex items-center gap-2">
+//                         <Link href={`/donation-requests/${req._id}`} title="View Request" className="text-blue-500 hover:text-blue-700 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition-colors">
+//                           <Eye size={18}/>
+//                         </Link>
+//                         <Link href={`/dashboard/requests/edit/${req._id}`} title="Edit Request" className="text-orange-500 hover:text-orange-700 bg-orange-50 p-2 rounded-lg hover:bg-orange-100 transition-colors">
+//                           <Edit size={18}/>
+//                         </Link>
+//                         <button onClick={() => handleDeleteClick(req._id)} title="Delete Request" className="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition-colors">
+//                           <Trash2 size={18}/>
+//                         </button>
+//                       </div>
+//                     </td>
+//                   )}
 //                 </tr>
 //               ))}
 //             </tbody>
@@ -175,7 +196,7 @@
 //         </div>
 //       </div>
 
-//       {/* 📱 Mobile Cards (Bulletproof Version) */}
+//       {/* 📱 Mobile Cards */}
 //       <div className="lg:hidden grid gap-4 w-full">
 //         {filteredRequests.map((req) => (
 //           <div key={req._id} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm w-full max-w-full overflow-hidden">
@@ -204,7 +225,7 @@
 //               <span className="text-[11px] font-bold text-gray-700 truncate">{req.district}, {req.upazila}</span>
 //             </div>
 
-//             <div className="grid grid-cols-[1fr_auto] gap-2 items-center">
+//             <div className={`grid gap-2 items-center ${isAdmin ? "grid-cols-[1fr_auto]" : "grid-cols-1"}`}>
 //               <select 
 //                 value={req.status} 
 //                 onChange={(e) => handleStatusUpdate(req._id, e.target.value)} 
@@ -216,27 +237,29 @@
 //                 <option value="canceled">Canceled</option>
 //               </select>
               
-              
-//               <div className="flex items-center gap-1.5 shrink-0">
-//                 <Link 
-//                   href={`/donation-requests/${req._id}`} 
-//                   className="h-9 w-9 flex items-center justify-center bg-blue-50 text-blue-600 rounded-lg border border-blue-100 shrink-0 hover:bg-blue-100 transition-colors"
-//                 >
-//                   <Eye size={16}/>
-//                 </Link>
-//                 <Link 
-//                   href={`/dashboard/requests/edit/${req._id}`} 
-//                   className="h-9 w-9 flex items-center justify-center bg-orange-50 text-orange-600 rounded-lg border border-orange-100 shrink-0 hover:bg-orange-100 transition-colors"
-//                 >
-//                   <Edit size={16}/>
-//                 </Link>
-//                 <button 
-//                   onClick={() => handleDeleteClick(req._id)} 
-//                   className="h-9 w-9 flex items-center justify-center bg-red-50 text-red-600 rounded-lg border border-red-100 shrink-0 hover:bg-red-100 transition-colors"
-//                 >
-//                   <Trash2 size={16}/>
-//                 </button>
-//               </div>
+//               {/* 💡 অ্যাডমিন হলেই শুধু মোবাইল ভিউয়ের বাটনগুলো দেখাবে */}
+//               {isAdmin && (
+//                 <div className="flex items-center gap-1.5 shrink-0">
+//                   <Link 
+//                     href={`/donation-requests/${req._id}`} 
+//                     className="h-9 w-9 flex items-center justify-center bg-blue-50 text-blue-600 rounded-lg border border-blue-100 shrink-0 hover:bg-blue-100 transition-colors"
+//                   >
+//                     <Eye size={16}/>
+//                   </Link>
+//                   <Link 
+//                     href={`/dashboard/requests/edit/${req._id}`} 
+//                     className="h-9 w-9 flex items-center justify-center bg-orange-50 text-orange-600 rounded-lg border border-orange-100 shrink-0 hover:bg-orange-100 transition-colors"
+//                   >
+//                     <Edit size={16}/>
+//                   </Link>
+//                   <button 
+//                     onClick={() => handleDeleteClick(req._id)} 
+//                     className="h-9 w-9 flex items-center justify-center bg-red-50 text-red-600 rounded-lg border border-red-100 shrink-0 hover:bg-red-100 transition-colors"
+//                   >
+//                     <Trash2 size={16}/>
+//                   </button>
+//                 </div>
+//               )}
 //             </div>
 
 //           </div>
@@ -249,8 +272,8 @@
 //         </div>
 //       )}
 
-//       {/* 💡 Delete Confirmation Modal */}
-//       {requestToDelete && (
+//       {/* Delete Confirmation Modal (Only accessible if admin) */}
+//       {isAdmin && requestToDelete && (
 //         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
 //           <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl">
 //             <h3 className="text-xl font-black text-gray-900 mb-2">Delete Request</h3>
@@ -271,7 +294,7 @@
 //                 Yes, Delete
 //               </button>
 //             </div>
-//           </div> 
+//           </div>
 //         </div>
 //       )}
 
@@ -288,6 +311,8 @@ import Image from "next/image";
 import Link from "next/link";
 // 💡 ইউজারের রোল চেক করার জন্য useSession ইম্পোর্ট করা হলো
 import { useSession } from "@/lib/auth-client"; 
+// CHANGED: টোকেন সহ রিকুয়েস্ট পাঠানোর helper
+import { authFetch } from "@/lib/authFetch";
 
 export default function AllRequestsPage() {
   // 💡 সেশন থেকে ইউজারের ডাটা বের করা হলো
@@ -301,15 +326,20 @@ export default function AllRequestsPage() {
   
   const [requestToDelete, setRequestToDelete] = useState(null); 
 
+  // CHANGED: /api/users এখন শুধু অ্যাডমিন দেখতে পারে, তাই টোকেন সহ কল করা হচ্ছে
   const fetchRequestsAndUsers = async () => {
     try {
-      const [reqRes, usersRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/donation_requests`),
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users`)
-      ]);
-
+      // ১) donation requests এখনো পাবলিক
+      const reqRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/donation_requests`);
       const requestsData = await reqRes.json();
-      const usersData = await usersRes.json();
+
+      // ২) ইউজার লিস্ট শুধু অ্যাডমিনের জন্য, টোকেন সহ
+      let usersData = [];
+      if (isAdmin) {
+        const usersRes = await authFetch("/api/users");
+        const usersJson = await usersRes.json();
+        usersData = Array.isArray(usersJson) ? usersJson : []; // কল ফেইল করলেও ক্র্যাশ করবে না
+      }
 
       const mergedData = requestsData.map(req => {
         const matchingUser = usersData.find(user => user.email === req.requesterEmail);
@@ -327,9 +357,11 @@ export default function AllRequestsPage() {
     }
   };
 
+  // CHANGED: সেশন লোড হওয়ার পর চালাতে হবে, কারণ isAdmin সেশনের উপর নির্ভর করে
   useEffect(() => { 
-    fetchRequestsAndUsers(); 
-  }, []);
+    if (session) fetchRequestsAndUsers(); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.id]);
 
   const filteredRequests = requests.filter(req => {
     const matchesBlood = bloodFilter === "all" || req.bloodGroup === bloodFilter;
@@ -346,15 +378,22 @@ export default function AllRequestsPage() {
     }
   };
 
+  // CHANGED: authFetch ব্যবহার করা হয়েছে, এরর হলে মেসেজ দেখায়
   const handleStatusUpdate = async (id, status) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/donation_requests/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
-    if (res.ok) { 
-      toast.success("Updated!"); 
-      fetchRequestsAndUsers(); 
+    try {
+      const res = await authFetch(`/api/donation_requests/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) { 
+        toast.success("Updated!"); 
+        fetchRequestsAndUsers(); 
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.message || "You are not allowed to do this");
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
     }
   };
 
@@ -362,12 +401,22 @@ export default function AllRequestsPage() {
     setRequestToDelete(id);
   };
 
+  // CHANGED: authFetch ব্যবহার করা হয়েছে, এরর হলে মেসেজ দেখায়
   const executeDelete = async () => {
     if (!requestToDelete) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/donation_requests/${requestToDelete}`, { method: "DELETE" });
-    if (res.ok) { 
+    try {
+      const res = await authFetch(`/api/donation_requests/${requestToDelete}`, {
+        method: "DELETE",
+      });
+      if (res.ok) { 
         toast.success("Deleted successfully!"); 
         fetchRequestsAndUsers(); 
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.message || "You are not allowed to do this");
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
     }
     setRequestToDelete(null); 
   };
@@ -504,7 +553,7 @@ export default function AllRequestsPage() {
                 <option value="canceled">Canceled</option>
               </select>
               
-              {/* 💡 অ্যাডমিন হলেই শুধু মোবাইল ভিউয়ের বাটনগুলো দেখাবে */}
+              {/* 💡 অ্যাডমিন হলেই শুধু মোবাইল ভিউয়ের বাটনগুলো দেখাবে */}
               {isAdmin && (
                 <div className="flex items-center gap-1.5 shrink-0">
                   <Link 
